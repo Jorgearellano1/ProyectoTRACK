@@ -26,19 +26,6 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
-    public Report updateReport(Long id, Report reportDetails) {
-        Optional<Report> existingReport = reportRepository.findById(id);
-        if (existingReport.isPresent()) {
-            Report report = existingReport.get();
-            report.setTitle(reportDetails.getTitle());
-            report.setDescription(reportDetails.getDescription());
-            report.setAuthor(reportDetails.getAuthor());
-            report.setDate(reportDetails.getDate());
-            return reportRepository.save(report);
-        } else {
-            throw new RuntimeException("Reporte no encontrado");
-        }
-    }
 
     public void deleteReport(Long id) {
         reportRepository.deleteById(id);

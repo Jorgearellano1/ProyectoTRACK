@@ -1,4 +1,4 @@
-package com.example.trackingbackend1.dto;
+package com.example.trackingbackend1.dtos;
 
 import java.util.Set;
 

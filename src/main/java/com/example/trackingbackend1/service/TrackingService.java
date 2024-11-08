@@ -1,12 +1,20 @@
 package com.example.trackingbackend1.service;
-
+import com.example.trackingbackend1.repository.TrackerRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.trackingbackend1.dtos.TrackingRequestDto;
+import com.example.trackingbackend1.dtos.TrackingResponseDto;
 import com.example.trackingbackend1.model.Tracking;
 import com.example.trackingbackend1.repository.TrackingRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TrackingService {
@@ -14,19 +22,51 @@ public class TrackingService {
     @Autowired
     private TrackingRepository trackingRepository;
 
-    public List<Tracking> getAllTrackings() {
-        return trackingRepository.findAll();
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TrackerRepository trackerRepository;
+
+
+
+
+    public List<TrackingResponseDto> getAllTrackings() {
+        List<Tracking> trackings = trackingRepository.findAll();
+
+        // Mapear cada Tracking a TrackingResponseDto usando ModelMapper
+        return trackings.stream()
+                .map(tracking -> modelMapper.map(tracking, TrackingResponseDto.class))
+                .collect(Collectors.toList());
     }
 
-    public List<Tracking> getTrackingsByUserId(Long userId) {
-        return trackingRepository.findByUserId(userId);
+
+    public void changeStatus(Long id){
+        Tracking tracking =   trackingRepository.getTrackingById(id);
+        tracking.setIsActive(false);
+        trackingRepository.save(tracking);
     }
 
-    public List<Tracking> getTrackingsByLicensePlate(String licensePlate) {
-        return trackingRepository.findByLicensePlate(licensePlate);
+    public List<TrackingResponseDto> getTrackingsByUserId(Long userId) {
+        List<Tracking> trackings = trackingRepository.findByUserId(userId);
+
+        // Mapear cada Tracking a TrackingResponseDto usando ModelMapper
+        return trackings.stream()
+                .map(tracking -> modelMapper.map(tracking, TrackingResponseDto.class))
+                .collect(Collectors.toList());
     }
 
-    public Tracking saveTracking(Tracking tracking) {
+    public Tracking createTracking(TrackingRequestDto request) {
+
+        Tracking tracking = new Tracking();
+        tracking.setColor(request.getColor());
+        tracking.setIsActive(true);
+        tracking.setStartTime(LocalDateTime.now());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        tracking.setTracker(trackerRepository.findByEmail(username));
         return trackingRepository.save(tracking);
     }
 
@@ -34,25 +74,21 @@ public class TrackingService {
         trackingRepository.deleteById(trackingId);
     }
 
-    public Optional<Tracking> getTrackingById(Long id) {
-        return trackingRepository.findById(id);
-    }
+    public TrackingResponseDto getTrackingById(Long id) {
 
-    public Tracking updateTracking(Long id, Tracking trackingDetails) {
-        Optional<Tracking> optionalTracking = trackingRepository.findById(id);
-        if (optionalTracking.isPresent()) {
-            Tracking tracking = optionalTracking.get();
-            tracking.setVehicleType(trackingDetails.getVehicleType());
-            tracking.setColor(trackingDetails.getColor());
-            tracking.setLicensePlate(trackingDetails.getLicensePlate());
-            tracking.setStartTime(trackingDetails.getStartTime());
-            tracking.setEndTime(trackingDetails.getEndTime());
-            tracking.setStartLocation(trackingDetails.getStartLocation());
-            tracking.setEndLocation(trackingDetails.getEndLocation());
-            tracking.setVehicleId(trackingDetails.getVehicleId());
-            return trackingRepository.save(tracking);
+        Optional<Tracking> trackingOptional = trackingRepository.findById(id);
+
+        if (trackingOptional.isPresent()) {
+            Tracking tracking = trackingOptional.get();
+            return modelMapper.map(tracking, TrackingResponseDto.class);
         } else {
-            throw new RuntimeException("Tracking no encontrado");
+            return null;
         }
     }
+
+
+
+
+
+
 }

@@ -1,6 +1,6 @@
 package com.example.trackingbackend1.controller;
 
-import com.example.trackingbackend1.dto.ZonaInteresDTO;
+import com.example.trackingbackend1.dtos.ZonaInteresDTO;
 import com.example.trackingbackend1.service.ZonaInteresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

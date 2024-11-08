@@ -1,5 +1,7 @@
 package com.example.trackingbackend1.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,8 +9,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+@Getter
+@Setter
 
 @Entity
 @Table(name = "users")
@@ -30,13 +35,7 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
+    private Role role;
 
     public User() {
     }
@@ -50,20 +49,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+        return List.of(new SimpleGrantedAuthority( role.name()));
     }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -85,47 +74,5 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
-
-    public void removeRole(Role role) {
-        this.roles.remove(role);
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 }

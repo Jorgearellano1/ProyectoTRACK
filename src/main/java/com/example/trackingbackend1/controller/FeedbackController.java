@@ -1,6 +1,5 @@
 package com.example.trackingbackend1.controller;
 
-import com.example.trackingbackend1.model.Feedback;
 import com.example.trackingbackend1.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

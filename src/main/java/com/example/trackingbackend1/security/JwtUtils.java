@@ -12,8 +12,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
-import com.example.trackingbackend1.service.UserDetailsImpl;
-
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);

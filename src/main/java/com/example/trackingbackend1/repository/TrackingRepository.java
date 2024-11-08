@@ -11,5 +11,5 @@ public interface TrackingRepository extends JpaRepository<Tracking, Long> {
 
     List<Tracking> findByUserId(Long userId);
 
-    List<Tracking> findByLicensePlate(String licensePlate);
+    Tracking getTrackingById(Long id);
 }

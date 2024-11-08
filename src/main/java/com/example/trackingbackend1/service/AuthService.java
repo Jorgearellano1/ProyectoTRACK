@@ -2,12 +2,11 @@ package com.example.trackingbackend1.service;
 
 import com.example.trackingbackend1.model.Role;
 import com.example.trackingbackend1.model.User;
-import com.example.trackingbackend1.repository.RoleRepository;
 import com.example.trackingbackend1.repository.UserRepository;
 import com.example.trackingbackend1.security.JwtUtils;
-import com.example.trackingbackend1.dto.JwtResponse;
-import com.example.trackingbackend1.dto.LoginRequest;
-import com.example.trackingbackend1.dto.SignupRequest;
+import com.example.trackingbackend1.dtos.JwtResponse;
+import com.example.trackingbackend1.dtos.LoginRequest;
+import com.example.trackingbackend1.dtos.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,12 +20,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import org.springframework.security.core.userdetails.UserDetails;
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
@@ -34,9 +33,9 @@ public class AuthService {
     private final Set<String> blacklist = new HashSet<>();
 
     @Autowired
-    public AuthService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
@@ -75,14 +74,7 @@ public class AuthService {
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
         user.setEmail(signUpRequest.getEmail());
         user.setEnabled(true);
-
-        Set<Role> roles = new HashSet<>();
-        Role defaultRole = roleRepository.findByName(Role.USER) // Aquí buscamos el rol 'ROLE_USER'
-                .orElseThrow(() -> new RuntimeException("Error: El rol por defecto no fue encontrado."));
-
-        roles.add(defaultRole);
-        user.setRoles(roles);
-
+        user.setRole(Role.PEATON);
         userRepository.save(user);
         return true;
     }

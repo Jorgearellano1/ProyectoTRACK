@@ -1,6 +1,6 @@
 package com.example.trackingbackend1.service;
 
-import com.example.trackingbackend1.dto.ZonaInteresDTO;
+import com.example.trackingbackend1.dtos.ZonaInteresDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

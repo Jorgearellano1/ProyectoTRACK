@@ -1,6 +1,6 @@
 package com.example.trackingbackend1.controller;
 
-import com.example.trackingbackend1.dto.UsuarioDTO;
+import com.example.trackingbackend1.dtos.UsuarioDTO;
 import com.example.trackingbackend1.model.User;
 import com.example.trackingbackend1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

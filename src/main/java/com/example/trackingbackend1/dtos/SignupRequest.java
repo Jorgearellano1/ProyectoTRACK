@@ -1,19 +1,14 @@
-package com.example.trackingbackend1.dto;
+package com.example.trackingbackend1.dtos;
 
-import java.io.Serializable;
+import java.util.Set;
 
-public class LoginRequest implements Serializable {
+public class SignupRequest {
 
-    private static final long serialVersionUID = -8091879091924046844L;
     private String username;
+    private String email;
     private String password;
 
-    public LoginRequest() {
-    }
-
-    public LoginRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public SignupRequest() {
     }
 
     public String getUsername() {
@@ -24,6 +19,14 @@ public class LoginRequest implements Serializable {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -31,4 +34,5 @@ public class LoginRequest implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

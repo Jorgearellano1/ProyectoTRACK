@@ -1,9 +1,9 @@
 package com.example.trackingbackend1.controller;
 
-import com.example.trackingbackend1.dto.JwtResponse;
-import com.example.trackingbackend1.dto.LoginRequest;
-import com.example.trackingbackend1.dto.MessageResponse;
-import com.example.trackingbackend1.dto.SignupRequest;
+import com.example.trackingbackend1.dtos.JwtResponse;
+import com.example.trackingbackend1.dtos.LoginRequest;
+import com.example.trackingbackend1.dtos.MessageResponse;
+import com.example.trackingbackend1.dtos.SignupRequest;
 import com.example.trackingbackend1.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
